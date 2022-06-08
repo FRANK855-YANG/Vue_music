@@ -11,19 +11,19 @@ const routes = [
   },
   {
     path: '/recommend',
-    components: Recommend
+    component: Recommend
   },
   {
     path: '/singer',
-    components: Singer
+    component: Singer
   },
   {
     path: '/top-list',
-    components: TopList
+    component: TopList
   },
   {
     path: '/search',
-    components: Search
+    component: Search
   }
 ]
 

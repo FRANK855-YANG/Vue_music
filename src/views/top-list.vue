@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name:'top-list'
+    name: 'top-list'
 }
 </script>
 

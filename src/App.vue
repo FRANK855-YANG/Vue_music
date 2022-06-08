@@ -8,11 +8,10 @@
 import MyHeader from '@/components/header/my-header'
 import Tab from '@/components/tab/tab.vue'
 export default {
-  components:{
+  components: {
     MyHeader,
     Tab
   }
 }
 
 </script>
-
