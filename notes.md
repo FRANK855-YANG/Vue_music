@@ -22,3 +22,4 @@ const { a } = gett()
 console.log(a)// 1
 ```
 - BetterScroll 提供了一个类，实例化的第一个参数是一个原生的 DOM 对象。当然，如果传递的是一个字符串，BetterScroll 内部会尝试调用 querySelector 去获取这个 DOM 对象。
+- 使用BS代替浏览器默认滚动，实现滚动回弹
