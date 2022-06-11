@@ -1,8 +1,12 @@
 <template>
+<!-- @scroll 自定义事件，传的参数丢给onScroll函数 -->
   <scroll
     class="index-list"
+    :probe-type="3"
+    @scroll="onScroll"
+    ref="scrollRef"
   >
-    <ul>
+    <ul ref="groupRef">
       <li
         v-for="group in data"
         :key="group.title"
@@ -21,11 +25,36 @@
         </ul>
       </li>
     </ul>
+    <div class="fixed" v-show="fixedTitle">
+        <div class="fixed-title">
+            {{fixedTitle}}
+        </div>
+    </div>
+    <div
+        class="shortcut"
+        @touchstart.stop.prevent="onShortcutTouchStart"
+        @touchmove.stop.prevent
+        @touchend.stop.prevent
+    >
+      <ul>
+        <li
+          v-for="(item, index) in shortcutList"
+          :key="item"
+          :data-index="index"
+          class="item"
+          :class="{ 'current': currentIndex === index }">
+          {{item}}
+        </li>
+      </ul>
+    </div>
   </scroll>
 </template>
 
 <script>
 import Scroll from '@/components/base/scroll/scroll.vue'
+import useFixed from './use-fixed'
+import useShortcut from './use-shortcut'
+
 export default {
     name: 'index-list',
     components: { Scroll },
@@ -36,6 +65,22 @@ export default {
                 return []
             }
         }
+    },
+    setup(props) {
+      const { groupRef, onScroll, fixedTitle, currentIndex } = useFixed(props)
+      const { shortcutList, onShortcutTouchStart, scrollRef } = useShortcut(props, groupRef)
+
+      return {
+        // use-fixed
+        groupRef,
+        onScroll,
+        fixedTitle,
+        currentIndex,
+        // use-shortcut
+        shortcutList,
+        scrollRef,
+        onShortcutTouchStart
+      }
     }
 }
 </script>

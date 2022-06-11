@@ -14,6 +14,7 @@ export default function useScroll(wrapperRef, options, emit) {
         })
 
         if (options.probeType > 0) {
+            // pos：实时滚动位置y
             scrollVal.on('scroll', (pos) => {
                 emit('scroll', pos)
             })
