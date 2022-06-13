@@ -68,4 +68,6 @@ console.log(a)// 1
     4. selectSinger方法把item传给二级路由视图，也就是singer-detail.vue
     5. 在singer-detail.vue把item传给后端传来的方法getSingerDetail，从而得到歌手的歌曲信息songs
 - 从获取歌曲url开始，就要挂VPN跑程序了
-- 源代码没有在.bg-image {}这样式里头添加上padding-top:70%;height:0
+- 4-5 iphone兼容小问题**跳过**
+- 4-6 下拉放大上滑模糊**跳过**
+- **优化**：当点击任意歌手进入其歌手详情页后，在详情页进行刷新，会导致数据丢失，原因是详情页的数据是通过props由外部传入的，为了解决这个问题，在路由跳转的同时把数据传入sessionstorage，跳转后如果遇到刷新，就把数据从sessionstorage里取出来进行使用
