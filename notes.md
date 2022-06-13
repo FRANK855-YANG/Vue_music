@@ -68,3 +68,4 @@ console.log(a)// 1
     4. selectSinger方法把item传给二级路由视图，也就是singer-detail.vue
     5. 在singer-detail.vue把item传给后端传来的方法getSingerDetail，从而得到歌手的歌曲信息songs
 - 从获取歌曲url开始，就要挂VPN跑程序了
+- 源代码没有在.bg-image {}这样式里头添加上padding-top:70%;height:0

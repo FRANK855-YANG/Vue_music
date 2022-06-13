@@ -1,11 +1,10 @@
 <template>
   <div class="singer-detail">
-    <!-- <music-list
+    <music-list
       :songs="songs"
       :title="title"
       :pic="pic"
-      :loading="loading"
-    ></music-list> -->
+    ></music-list>
   </div>
 </template>
 
@@ -13,18 +12,33 @@
   // import createDetailComponent from '@/assets/js/create-detail-component'
   import { getSingerDetail } from '@/service/singer'
   import { processSongs } from '@/service/song'
+  import MusicList from '@/components/music-list/music-list.vue'
   // import { SINGER_KEY } from '@/assets/js/constant'
 
   // export default createDetailComponent('singer-detail', SINGER_KEY, getSingerDetail)
 export default {
   name: 'singer-detail',
+  components: { MusicList },
   props: {
+    // 由router-view传入
     singer: Object
+  },
+  data() {
+    return {
+      songs: []
+    }
+  },
+  computed: {
+    pic() {
+      return this.singer && this.singer.pic
+    },
+    title() {
+      return this.singer && this.singer.name
+    }
   },
   async created() {
     const result = await getSingerDetail(this.singer)
-    const songs = await processSongs(result.songs)
-    console.log(songs)
+    this.songs = await processSongs(result.songs)
   }
 }
 </script>
