@@ -1,6 +1,10 @@
 <template>
   <div class="singer">
-    <IndexList :data="singers"></IndexList>
+    <IndexList
+    :data="singers"
+    @select="selectSinger">
+    </IndexList>
+    <router-view :singer="selectedSinger"></router-view>
   </div>
 </template>
 
@@ -14,7 +18,16 @@ export default {
   },
   data() {
     return {
-      singers: []
+      singers: [],
+      selectedSinger: null
+    }
+  },
+  methods: {
+    selectSinger(singer) {
+      this.selectedSinger = singer
+      this.$router.push({
+        path: `/singer/${singer.mid}`
+      })
     }
   },
   async created() {
