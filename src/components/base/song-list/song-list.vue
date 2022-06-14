@@ -2,8 +2,9 @@
   <ul class="song-list">
     <li
       class="item"
-      v-for="song in songs"
+      v-for="(song, index) in songs"
       :key="song.id"
+      @click="selectItem(song,index)"
     >
       <!-- <div class="rank" v-if="rank">
         <span :class="getRankCls(index)">{{ getRankText(index) }}</span>
@@ -28,14 +29,14 @@
       }
       // rank: Boolean
     },
-    // emits: ['select'],
+    emits: ['select'],
     methods: {
       getDesc(song) {
         return `${song.singer}·${song.album}`
+      },
+      selectItem(song, index) {
+        this.$emit('select', { song, index })
       }
-      // selectItem(song, index) {
-      //   this.$emit('select', { song, index })
-      // },
       // getRankCls(index) {
       //   if (index <= 2) {
       //     return `icon icon${index}`

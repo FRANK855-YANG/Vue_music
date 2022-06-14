@@ -38,6 +38,7 @@
       <div class="song-list-wrapper">
         <song-list
           :songs="songs"
+          @select="selectItem"
         ></song-list>
       </div>
     </scroll>
@@ -47,7 +48,7 @@
 <script>
   import SongList from '@/components/base/song-list/song-list'
   import Scroll from '@/components/base/scroll/scroll.vue'
-  // import { mapActions, mapState } from 'vuex'
+  import { mapActions } from 'vuex'
 
   const RESERVED_HEIGHT = 40
 
@@ -66,10 +67,6 @@
       },
       title: String,
       pic: String
-      // noResultText: {
-      //   type: String,
-      //   default: '抱歉，没有找到可播放的歌曲'
-      // },
       // rank: Boolean
     },
     data() {
@@ -80,9 +77,6 @@
       }
     },
     computed: {
-      // noResult() {
-      //   return !this.loading && !this.songs.length
-      // },
       // playBtnStyle() {
       //   let display = ''
       //   if (this.scrollY >= this.maxTranslateY) {
@@ -132,20 +126,20 @@
       },
       onScroll(pos) {
         this.scrollY = -pos.y
-      }
-    //   selectItem({ song, index }) {
-    //     this.selectPlay({
-    //       list: this.songs,
-    //       index
-    //     })
-    //   },
+      },
+      selectItem({ song, index }) {
+        this.selectPlay({
+          list: this.songs,
+          index
+        })
+      },
     //   random() {
     //     this.randomPlay(this.songs)
     //   },
-    //   ...mapActions([
-    //     'selectPlay',
-    //     'randomPlay'
-    //   ])
+      ...mapActions([
+        'selectPlay'
+        // 'randomPlay'
+      ])
     }
   }
 </script>

@@ -71,3 +71,20 @@ console.log(a)// 1
 - 4-5 iphone兼容小问题**跳过**
 - 4-6 下拉放大上滑模糊**跳过**
 - **优化**：当点击任意歌手进入其歌手详情页后，在详情页进行刷新，会导致数据丢失，原因是详情页的数据是通过props由外部传入的，为了解决这个问题，在路由跳转的同时把数据传入sessionstorage，跳转后如果遇到刷新，就把数据从sessionstorage里取出来进行使用
+
+---
+
+## 6.14 ##
+- 路由过渡动画：看v-router官方文档
+  - ```css
+       .v-enter-active,.v-leave-active {
+          transition: opacity 0.5s ease;
+        }
+       .v-enter-from,.v-leave-to {
+          opacity: 0;
+        }
+    ```
+- 4-9 no-result**跳过**：components/base/no-result文件夹，assets/js/create-loading-like-directive.js文件
+- 
+
+
