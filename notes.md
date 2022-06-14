@@ -85,8 +85,16 @@ console.log(a)// 1
         }
     ```
 - 4-9 no-result**跳过**：components/base/no-result文件夹，assets/js/create-loading-like-directive.js文件
-- vuex的使用?什么时候使用vuex?mapAction
+- vuex的使用?什么时候使用vuex?mapAction(vue 2), useStore(vue 3)
 - knuth shuffle洗牌算法实现随机播放，比Math.random更随机
+- player 组件使用computed的原因：自己配置响应式。与ref定义响应式数据区分
+- fullScreen 是定义在 state 中的，本身就已经是响应式的了，在 Composition API 中就应该用计算属性获取它，这也是官方的文档推荐的方式
+- l L 大小写查错一小时
+- 当歌曲暂停时，切换到下一首要自动播放
+- 当歌曲非主动停止播放时，记得更新状态
+- **优化**：两个边界，歌曲列表为空直接return；歌曲列表只有一首歌点击上一首或下一首直接单曲循环
+- 问题：audio在歌曲src被传入之前就开始执行play(),导致报错
+  - 解决方案：使用原生canplay事件，判断是否ready
 - 
 
 
