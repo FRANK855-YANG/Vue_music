@@ -85,6 +85,8 @@ console.log(a)// 1
         }
     ```
 - 4-9 no-result**跳过**：components/base/no-result文件夹，assets/js/create-loading-like-directive.js文件
+- vuex的使用?什么时候使用vuex?mapAction
+- knuth shuffle洗牌算法实现随机播放，比Math.random更随机
 - 
 
 

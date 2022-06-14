@@ -12,7 +12,7 @@
       :style="bgImageStyle"
       ref="bgImage"
     >
-      <!-- <div
+      <div
         class="play-btn-wrapper"
         :style="playBtnStyle"
       >
@@ -24,7 +24,7 @@
           <i class="icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
-      </div> -->
+      </div>
       <div
         class="filter"
       ></div>
@@ -77,15 +77,15 @@
       }
     },
     computed: {
-      // playBtnStyle() {
-      //   let display = ''
-      //   if (this.scrollY >= this.maxTranslateY) {
-      //     display = 'none'
-      //   }
-      //   return {
-      //     display
-      //   }
-      // },
+      playBtnStyle() {
+        let display = ''
+        if (this.scrollY >= this.maxTranslateY) {
+          display = 'none'
+        }
+        return {
+          display
+        }
+      },
       bgImageStyle() {
         const scrollY = this.scrollY
         let zIndex = 0
@@ -133,12 +133,12 @@
           index
         })
       },
-    //   random() {
-    //     this.randomPlay(this.songs)
-    //   },
+      random() {
+        this.randomPlay(this.songs)
+      },
       ...mapActions([
-        'selectPlay'
-        // 'randomPlay'
+        'selectPlay',
+        'randomPlay'
       ])
     }
   }
