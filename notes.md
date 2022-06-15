@@ -95,6 +95,11 @@ console.log(a)// 1
 - **优化**：两个边界，歌曲列表为空直接return；歌曲列表只有一首歌点击上一首或下一首直接单曲循环
 - 问题：audio在歌曲src被传入之前就开始执行play(),导致报错
   - 解决方案：使用原生canplay事件，判断是否ready
-- 
 
+---
+
+## 6.15 ##
+- 基本播放逻辑直接写组件里，复杂业务逻辑利用组合式API钩子函数封装出去，使逻辑更加清晰
+- 组件中修改vuex中数据：`$store.dispatch('action中的方法名',数据)` 或 `$store.commit('mutations中的方法名',数据)`,也是mapActions 和 mapMutations 的实质
+- action的第一个配置项，可以用context也可以用{commit}；第二个配置项自己传
 

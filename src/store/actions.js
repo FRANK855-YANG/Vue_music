@@ -18,3 +18,18 @@ export function randomPlay({ commit }, list) {
     commit('setPlayList', shuffle(list))
     commit('setCurrentIndex', 0)
 }
+
+export function changeMode({ commit, state, getters }, mode) {
+    const currentId = getters.currentSong.id
+    if (mode === PLAY_MODE.random) {
+        commit('setPlayList', shuffle(state.sequenceList))
+    } else {
+        commit('setPlayList', state.sequenceList)
+    }
+    // ES6 findIndex数组新方法，传入函数，返回复合函数要求的第一个元素的index
+    const index = state.playList.findIndex((song) => {
+        return song.id === currentId
+    })
+    commit('setCurrentIndex', index)
+    commit('setPlayMode', mode)
+}
