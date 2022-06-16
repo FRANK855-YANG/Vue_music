@@ -119,3 +119,4 @@ console.log(a)// 1
 - display none 记得改回来
 - canplay的ready() and getLyric 都是异步过程，不知道谁先触发为了保证playLyric一定会执行,在ready()里加palyLyric()
 - 5-13 纯音乐**跳过**
+- 5-15 方向锁**跳过**

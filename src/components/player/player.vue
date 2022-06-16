@@ -15,9 +15,13 @@
           <h2 class="subtitle">{{currentSong.singer}}</h2>
         </div>
         <div
-          class="middle">
+          class="middle"
+          @touchstart.prevent="onMiddleTouchStart"
+          @touchmove.prevent="onMiddleTouchMove"
+          @touchend.prevent="onMiddleTouchEnd">
           <div
-            class="middle-l">
+            class="middle-l"
+            :style="middleLStyle">
             <div
               class="cd-wrapper">
               <div
@@ -31,7 +35,8 @@
           </div>
           <scroll
             class="middle-r"
-            ref="lyricScrollRef">
+            ref="lyricScrollRef"
+            :style="middleRStyle">
             <div class="lyric-wrapper">
               <div v-if="currentLyric" ref="lyricListRef">
                 <p
@@ -47,6 +52,10 @@
           </scroll>
         </div>
         <div class="bottom">
+          <div class="dot-wrapper">
+            <span class="dot" :class="{'active':currentShow==='cd'}"></span>
+            <span class="dot" :class="{'active':currentShow==='lyric'}"></span>
+          </div>
           <div class="progress-wrapper">
             <span class="time time-l">{{formatTime(currentTime)}}</span>
             <div class="progress-bar-wrapper">
@@ -99,6 +108,7 @@ import { formatTime } from '@/assets/js/util'
 import { PLAY_MODE } from '@/assets/js/constant'
 import useLyric from './use-lyric'
 import Scroll from '@/components/base/scroll/scroll.vue'
+import useMiddleInteractive from './use-middle-interactive'
 
 export default {
   name: 'player',
@@ -116,6 +126,7 @@ export default {
       const { modeIcon, changeMode } = useMode()
       const { getFavoriteIcon, toggleFavorite } = useFavorite()
       const { currentLyric, currentLineNum, playLyric, lyricScrollRef, lyricListRef, stopLyric } = useLyric({ songReady, currentTime })
+       const { currentShow, middleLStyle, middleRStyle, onMiddleTouchStart, onMiddleTouchMove, onMiddleTouchEnd } = useMiddleInteractive()
       // vuex
       const store = useStore()
       const fullScreen = computed(() => store.state.fullScreen)
@@ -300,7 +311,13 @@ export default {
         playLyric,
         lyricScrollRef,
         lyricListRef,
-        stopLyric
+        stopLyric,
+        currentShow,
+        middleLStyle,
+        middleRStyle,
+        onMiddleTouchStart,
+        onMiddleTouchMove,
+        onMiddleTouchEnd
       }
     }
 }
@@ -371,7 +388,7 @@ export default {
         white-space: nowrap;
         font-size: 0;
         .middle-l {
-          display: none;
+          display: inline-block;
           vertical-align: top;
           position: relative;
           width: 100%;
