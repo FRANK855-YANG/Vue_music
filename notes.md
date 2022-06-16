@@ -110,3 +110,10 @@ console.log(a)// 1
 
 ## 6.16 ##
 - **优化**progress-bar.vue 文件中将touch对象定义在created中而不是data中的原因，我们仅仅想共享数据而不是要与模板互动发生响应式，如果盲目放入data会导致性能浪费
+- @keyframes 语法: from to 
+- JS 原生方法：通过getComputedStyle方法可以用来获取DOM元素实际显示时的样式
+- **难点**：唱片旋转逻辑：通过动态绑定样式，播放的时候让cd这个盒子旋转。出现的问题是暂停之后再播放没有办法继续旋转，解决方案为让外层的盒子随着cd一起旋转，这样暂停的时候大家的旋转角度都一样，所有就不会回到原点了
+- 利用css3 animation--play-state属性直接摆脱use-cd钩子函数
+- use-lyrics line30 小小的节流
+- 第三方插件将获取到的歌词字符串转化为数组，数组lines里放着每一行歌词，每一个lines都有txt属性，num属性
+- display none 记得改回来

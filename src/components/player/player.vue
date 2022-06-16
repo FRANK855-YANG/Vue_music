@@ -14,6 +14,36 @@
           <h1 class="title">{{currentSong.name}}</h1>
           <h2 class="subtitle">{{currentSong.singer}}</h2>
         </div>
+        <div
+          class="middle">
+          <div
+            class="middle-l">
+            <div
+              class="cd-wrapper">
+              <div
+                class="cd">
+                <img
+                  :src="currentSong.pic"
+                  class="image"
+                  ref="cdImageRef">
+              </div>
+            </div>
+          </div>
+          <scroll class="middle-r">
+            <div class="lyric-wrapper">
+              <div v-if="currentLyric">
+                <p
+                class="text"
+                :class="{'current': currentLineNum === index}"
+                v-for="(line,index) in currentLyric.lines"
+                :key="line.num"
+              >
+                {{line.txt}}
+                </p>
+              </div>
+            </div>
+          </scroll>
+        </div>
         <div class="bottom">
           <div class="progress-wrapper">
             <span class="time time-l">{{formatTime(currentTime)}}</span>
@@ -65,20 +95,25 @@ import useFavorite from './use-favorite'
 import progressBar from './progress-bar.vue'
 import { formatTime } from '@/assets/js/util'
 import { PLAY_MODE } from '@/assets/js/constant'
+import useLyric from './use-lyric'
+import Scroll from '@/components/base/scroll/scroll.vue'
 
 export default {
   name: 'player',
   components: {
-      progressBar
+      progressBar,
+      Scroll
     },
     setup() {
       const songReady = ref(false)
       const audioRef = ref(null)
       const currentTime = ref(0)
       let progressChanging = false
+      const cdImageRef = ref(null)
       // hook
       const { modeIcon, changeMode } = useMode()
       const { getFavoriteIcon, toggleFavorite } = useFavorite()
+      const { currentLyric, currentLineNum, playLyric } = useLyric({ songReady, currentTime })
       // vuex
       const store = useStore()
       const fullScreen = computed(() => store.state.fullScreen)
@@ -87,7 +122,7 @@ export default {
       const currentIndex = computed(() => store.state.currentIndex)
       const playlist = computed(() => store.state.playlist)
       const playMode = computed(() => store.state.playMode)
-
+      // computed
       const playIcon = computed(() => {
           return playing.value ? 'icon-pause' : 'icon-play'
       })
@@ -97,11 +132,11 @@ export default {
       const progress = computed(() => {
         return currentTime.value / currentSong.value.duration
       })
-    // 点击歌曲名或切歌时触发播放
-    watch(currentSong, (newSong) => {
-      if (!newSong.id || !newSong.url) {
+      // 点击歌曲名或切歌时触发播放
+      watch(currentSong, (newSong) => {
+        if (!newSong.id || !newSong.url) {
           return
-      }
+        }
         // 每次歌曲发生变化时songReady置为false,currentTime置为零
         currentTime.value = 0
         songReady.value = false
@@ -113,6 +148,11 @@ export default {
       watch(playing, (newPlaying) => {
         if (!songReady.value) {
           return
+        }
+        if (newPlaying) {
+          cdImageRef.value.style.animationPlayState = 'running'
+        } else {
+          cdImageRef.value.style.animationPlayState = 'paused'
         }
         const audioEl = audioRef.value
         newPlaying ? audioEl.play() : audioEl.pause()
@@ -183,6 +223,7 @@ export default {
           return
         }
         songReady.value = true
+        playLyric()
       }
       // 处理边界，防止卡住时songReady永远为false，永远不能切歌
       function error() {
@@ -209,7 +250,7 @@ export default {
           store.commit('setPlayingState', true)
         }
       }
-
+      // 歌曲结束后根据播放模式切换到下一首歌
       function end() {
         currentTime.value = 0
         if (playMode.value === PLAY_MODE.loop) {
@@ -241,7 +282,11 @@ export default {
         formatTime,
         onProgressChanging,
         onProgressChanged,
-        end
+        end,
+        cdImageRef,
+        currentLyric,
+        currentLineNum,
+        playLyric
       }
     }
 }
@@ -312,7 +357,7 @@ export default {
         white-space: nowrap;
         font-size: 0;
         .middle-l {
-          display: inline-block;
+          display: none;
           vertical-align: top;
           position: relative;
           width: 100%;
@@ -338,9 +383,7 @@ export default {
                 box-sizing: border-box;
                 border-radius: 50%;
                 border: 10px solid rgba(255, 255, 255, 0.1);
-              }
-              .playing {
-                animation: rotate 20s linear infinite
+                animation: rotate 20s linear infinite;
               }
             }
           }
