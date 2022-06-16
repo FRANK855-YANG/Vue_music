@@ -102,4 +102,11 @@ console.log(a)// 1
 - 基本播放逻辑直接写组件里，复杂业务逻辑利用组合式API钩子函数封装出去，使逻辑更加清晰
 - 组件中修改vuex中数据：`$store.dispatch('action中的方法名',数据)` 或 `$store.commit('mutations中的方法名',数据)`,也是mapActions 和 mapMutations 的实质
 - action的第一个配置项，可以用context也可以用{commit}；第二个配置项自己传
+- **所有的PlayList的L都大写了**
+- vuex中管理的数据，如果刷新浏览器会清空，所以有些数据要提前缓存至浏览器中
+- **优化**：封装存到localstorage的save和remove函数，array-store.js
 
+---
+
+## 6.16 ##
+- **优化**progress-bar.vue 文件中将touch对象定义在created中而不是data中的原因，我们仅仅想共享数据而不是要与模板互动发生响应式，如果盲目放入data会导致性能浪费

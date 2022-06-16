@@ -6,7 +6,7 @@ export function selectPlay({ commit }, { list, index }) {
     commit('setSequenceList', list)
     commit('setPlayingState', true)
     commit('setFullScreen', true)
-    commit('setPlayList', list)
+    commit('setPlaylist', list)
     commit('setCurrentIndex', index)
 }
 
@@ -15,19 +15,19 @@ export function randomPlay({ commit }, list) {
     commit('setSequenceList', list)
     commit('setPlayingState', true)
     commit('setFullScreen', true)
-    commit('setPlayList', shuffle(list))
+    commit('setPlaylist', shuffle(list))
     commit('setCurrentIndex', 0)
 }
 
 export function changeMode({ commit, state, getters }, mode) {
     const currentId = getters.currentSong.id
     if (mode === PLAY_MODE.random) {
-        commit('setPlayList', shuffle(state.sequenceList))
+        commit('setPlaylist', shuffle(state.sequenceList))
     } else {
-        commit('setPlayList', state.sequenceList)
+        commit('setPlaylist', state.sequenceList)
     }
     // ES6 findIndex数组新方法，传入函数，返回复合函数要求的第一个元素的index
-    const index = state.playList.findIndex((song) => {
+    const index = state.playlist.findIndex((song) => {
         return song.id === currentId
     })
     commit('setCurrentIndex', index)

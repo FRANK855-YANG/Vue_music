@@ -15,6 +15,17 @@
           <h2 class="subtitle">{{currentSong.singer}}</h2>
         </div>
         <div class="bottom">
+          <div class="progress-wrapper">
+            <span class="time time-l">{{formatTime(currentTime)}}</span>
+            <div class="progress-bar-wrapper">
+              <progress-bar
+                :progress="progress"
+                @progress-changing="onProgressChanging"
+                @progress-changed="onProgressChanged">
+              </progress-bar>
+            </div>
+            <span class="time time-r">{{formatTime(currentSong.duration)}}</span>
+          </div>
           <div class="operators">
             <div class="icon i-left">
               <i @click="changeMode" :class="modeIcon"></i>
@@ -29,7 +40,7 @@
               <i @click="next" class="icon-next"></i>
             </div>
             <div class="icon i-right">
-              <i class="icon-not-favorite"></i>
+              <i @click="toggleFavorite(currentSong)" :class="getFavoriteIcon(currentSong)"></i>
             </div>
           </div>
         </div>
@@ -39,6 +50,8 @@
         @pause="pause"
         @canplay="ready"
         @error="error"
+        @timeupdate="updateTime"
+        @ended="end"
     >
     </audio>
   </div>
@@ -48,21 +61,32 @@
 import { useStore } from 'vuex'
 import { computed, watch, ref } from 'vue'
 import useMode from './use-mode'
+import useFavorite from './use-favorite'
+import progressBar from './progress-bar.vue'
+import { formatTime } from '@/assets/js/util'
+import { PLAY_MODE } from '@/assets/js/constant'
 
 export default {
-    name: 'player',
+  name: 'player',
+  components: {
+      progressBar
+    },
     setup() {
       const songReady = ref(false)
       const audioRef = ref(null)
+      const currentTime = ref(0)
+      let progressChanging = false
       // hook
       const { modeIcon, changeMode } = useMode()
+      const { getFavoriteIcon, toggleFavorite } = useFavorite()
       // vuex
       const store = useStore()
       const fullScreen = computed(() => store.state.fullScreen)
       const currentSong = computed(() => store.getters.currentSong)
       const playing = computed(() => store.state.playing)
       const currentIndex = computed(() => store.state.currentIndex)
-      const playList = computed(() => store.state.playList)
+      const playlist = computed(() => store.state.playlist)
+      const playMode = computed(() => store.state.playMode)
 
       const playIcon = computed(() => {
           return playing.value ? 'icon-pause' : 'icon-play'
@@ -70,12 +94,16 @@ export default {
       const disableClass = computed(() => {
         return songReady.value ? '' : 'disable'
       })
+      const progress = computed(() => {
+        return currentTime.value / currentSong.value.duration
+      })
     // 点击歌曲名或切歌时触发播放
     watch(currentSong, (newSong) => {
       if (!newSong.id || !newSong.url) {
           return
       }
-        // 每次歌曲发生变化时songReady置为false
+        // 每次歌曲发生变化时songReady置为false,currentTime置为零
+        currentTime.value = 0
         songReady.value = false
         const audioEl = audioRef.value
         audioEl.src = newSong.url
@@ -106,7 +134,7 @@ export default {
       }
       // 上一首
       function prev() {
-        const list = playList.value
+        const list = playlist.value
         if (!songReady.value || !list.length) {
           return
         }
@@ -125,7 +153,7 @@ export default {
       }
       // 下一首
       function next() {
-        const list = playList.value
+        const list = playlist.value
         if (!songReady.value || !list.length) {
           return
         }
@@ -146,7 +174,8 @@ export default {
       function loop() {
         const audioEl = audioRef.value
         audioEl.currentTime = 0 // 原生属性
-        audioEl.Play()
+        audioEl.play()
+        store.commit('setPlayingState', true)
       }
       // canplay时songPlay为true
       function ready() {
@@ -158,6 +187,36 @@ export default {
       // 处理边界，防止卡住时songReady永远为false，永远不能切歌
       function error() {
         songReady.value = true
+      }
+      // html原生事件timeupdate 实时更新currentTime
+      function updateTime(e) {
+        if (!progressChanging) {
+          currentTime.value = e.target.currentTime
+        }
+      }
+      // 进度条开始拖动
+      function onProgressChanging(progress) {
+        progressChanging = true // 标志位，防止updateTime()和本函数同时修改进度条，导致的撞车
+        currentTime.value = currentSong.value.duration * progress
+      }
+      // 进度条拖动结束
+      function onProgressChanged(progress) {
+        progressChanging = false
+        // 拖动过程中歌曲还是正常播放的，拖动结束才真正改变歌曲播放的进度(audioRef)
+        audioRef.value.currentTime = currentTime.value = currentSong.value.duration * progress
+        // 如果是暂停状态拖完进度条让其播放
+        if (!playing.value) {
+          store.commit('setPlayingState', true)
+        }
+      }
+
+      function end() {
+        currentTime.value = 0
+        if (playMode.value === PLAY_MODE.loop) {
+          loop()
+        } else {
+          next()
+        }
       }
       return {
         fullScreen,
@@ -173,7 +232,16 @@ export default {
         disableClass,
         error,
         modeIcon,
-        changeMode
+        changeMode,
+        getFavoriteIcon,
+        toggleFavorite,
+        progress,
+        currentTime,
+        updateTime,
+        formatTime,
+        onProgressChanging,
+        onProgressChanged,
+        end
       }
     }
 }
