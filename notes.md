@@ -117,3 +117,5 @@ console.log(a)// 1
 - use-lyrics line30 小小的节流
 - 第三方插件将获取到的歌词字符串转化为数组，数组lines里放着每一行歌词，每一个lines都有txt属性，num属性
 - display none 记得改回来
+- canplay的ready() and getLyric 都是异步过程，不知道谁先触发为了保证playLyric一定会执行,在ready()里加palyLyric()
+- 5-13 纯音乐**跳过**

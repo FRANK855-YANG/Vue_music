@@ -6,10 +6,8 @@ import Lyric from 'lyric-parser'
 export default function useLyric({ songReady, currentTime }) {
   const currentLyric = ref(null)
   const currentLineNum = ref(0)
-  // const pureMusicLyric = ref('')
-  // const playingLyric = ref('')
-  // const lyricScrollRef = ref(null)
-  // const lyricListRef = ref(null)
+  const lyricScrollRef = ref(null)
+  const lyricListRef = ref(null)
 
   const store = useStore()
   const currentSong = computed(() => store.getters.currentSong)
@@ -18,11 +16,10 @@ export default function useLyric({ songReady, currentTime }) {
     if (!newSong.url || !newSong.id) {
       return
     }
-    // stopLyric()
-    // currentLyric.value = null
-    // currentLineNum.value = 0
-    // pureMusicLyric.value = ''
-    // playingLyric.value = ''
+    // 防止切歌时高亮歌词错位
+    stopLyric()
+    currentLyric.value = null
+    currentLineNum.value = 0
 
     const lyric = await getLyric(newSong)
     store.commit('addSongLyric', {
@@ -34,14 +31,9 @@ export default function useLyric({ songReady, currentTime }) {
     }
 
     currentLyric.value = new Lyric(lyric, handleLyric)
-    // const hasLyric = currentLyric.value.lines.length
-    // if (hasLyric) {
     if (songReady.value) {
       playLyric()
     }
-    // } else {
-    //   playingLyric.value = pureMusicLyric.value = lyric.replace(/\[(\d{2}):(\d{2}):(\d{2})\]/g, '')
-    // }
   })
 
   function playLyric() {
@@ -51,37 +43,35 @@ export default function useLyric({ songReady, currentTime }) {
     }
   }
 
-  // function stopLyric() {
-  //   const currentLyricVal = currentLyric.value
-  //   if (currentLyricVal) {
-  //     currentLyricVal.stop()
-  //   }
-  // }
+  function stopLyric() {
+    const currentLyricVal = currentLyric.value
+    if (currentLyricVal) {
+      currentLyricVal.stop()
+    }
+  }
 
-  function handleLyric({ lineNum, txt }) {
+  function handleLyric({ lineNum }) {
     currentLineNum.value = lineNum
-    // playingLyric.value = txt
-    // const scrollComp = lyricScrollRef.value
-    // const listEl = lyricListRef.value
-    // if (!listEl) {
-    //   return
-    // }
-    // if (lineNum > 5) {
-    //   const lineEl = listEl.children[lineNum - 5]
-    //   scrollComp.scroll.scrollToElement(lineEl, 1000)
-    // } else {
-    //   scrollComp.scroll.scrollTo(0, 0, 1000)
-    // }
+
+    const scrollComp = lyricScrollRef.value // 拿到组件实例
+    const listEl = lyricListRef.value // 拿到dom实例
+    if (!listEl) {
+      return
+    }
+    if (lineNum > 5) {
+      const lineEl = listEl.children[lineNum - 5]
+      scrollComp.scroll.scrollToElement(lineEl, 1000)
+    } else {
+      scrollComp.scroll.scrollTo(0, 0, 1000)
+    }
   }
 
   return {
     currentLyric,
     currentLineNum,
-    // pureMusicLyric,
-    // playingLyric,
-    // lyricScrollRef,
-    // lyricListRef,
-    playLyric
-    // stopLyric
+    lyricScrollRef,
+    lyricListRef,
+    playLyric,
+    stopLyric
   }
 }

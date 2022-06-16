@@ -29,9 +29,11 @@
               </div>
             </div>
           </div>
-          <scroll class="middle-r">
+          <scroll
+            class="middle-r"
+            ref="lyricScrollRef">
             <div class="lyric-wrapper">
-              <div v-if="currentLyric">
+              <div v-if="currentLyric" ref="lyricListRef">
                 <p
                 class="text"
                 :class="{'current': currentLineNum === index}"
@@ -113,7 +115,7 @@ export default {
       // hook
       const { modeIcon, changeMode } = useMode()
       const { getFavoriteIcon, toggleFavorite } = useFavorite()
-      const { currentLyric, currentLineNum, playLyric } = useLyric({ songReady, currentTime })
+      const { currentLyric, currentLineNum, playLyric, lyricScrollRef, lyricListRef, stopLyric } = useLyric({ songReady, currentTime })
       // vuex
       const store = useStore()
       const fullScreen = computed(() => store.state.fullScreen)
@@ -155,7 +157,13 @@ export default {
           cdImageRef.value.style.animationPlayState = 'paused'
         }
         const audioEl = audioRef.value
-        newPlaying ? audioEl.play() : audioEl.pause()
+        if (newPlaying) {
+          audioEl.play()
+          playLyric()
+        } else {
+          audioEl.pause()
+          stopLyric()
+        }
       })
       // 回退
       function goBack() {
@@ -239,6 +247,8 @@ export default {
       function onProgressChanging(progress) {
         progressChanging = true // 标志位，防止updateTime()和本函数同时修改进度条，导致的撞车
         currentTime.value = currentSong.value.duration * progress
+        playLyric() // 先定位再停止播放
+        stopLyric()
       }
       // 进度条拖动结束
       function onProgressChanged(progress) {
@@ -249,6 +259,7 @@ export default {
         if (!playing.value) {
           store.commit('setPlayingState', true)
         }
+        playLyric() // 同步歌词至当前位置
       }
       // 歌曲结束后根据播放模式切换到下一首歌
       function end() {
@@ -286,7 +297,10 @@ export default {
         cdImageRef,
         currentLyric,
         currentLineNum,
-        playLyric
+        playLyric,
+        lyricScrollRef,
+        lyricListRef,
+        stopLyric
       }
     }
 }
