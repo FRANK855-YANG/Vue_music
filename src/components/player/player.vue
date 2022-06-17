@@ -1,7 +1,7 @@
 <template>
-  <div class="player">
-    <div
-        class="normal-player"
+  <div class="player"
+    v-show="playlist.length">
+    <div class="normal-player"
         v-show="fullScreen"
       >
         <div class="background">
@@ -14,8 +14,7 @@
           <h1 class="title">{{currentSong.name}}</h1>
           <h2 class="subtitle">{{currentSong.singer}}</h2>
         </div>
-        <div
-          class="middle"
+        <div class="middle"
           @touchstart.prevent="onMiddleTouchStart"
           @touchmove.prevent="onMiddleTouchMove"
           @touchend.prevent="onMiddleTouchEnd">
@@ -60,6 +59,7 @@
             <span class="time time-l">{{formatTime(currentTime)}}</span>
             <div class="progress-bar-wrapper">
               <progress-bar
+                 ref="barRef"
                 :progress="progress"
                 @progress-changing="onProgressChanging"
                 @progress-changed="onProgressChanged">
@@ -86,6 +86,7 @@
           </div>
         </div>
     </div>
+    <mini-player :toggle-play="togglePlay"></mini-player>
     <audio
         ref="audioRef"
         @pause="pause"
@@ -100,21 +101,23 @@
 
 <script>
 import { useStore } from 'vuex'
-import { computed, watch, ref } from 'vue'
+import { computed, watch, ref, nextTick } from 'vue'
 import useMode from './use-mode'
 import useFavorite from './use-favorite'
-import progressBar from './progress-bar.vue'
+import ProgressBar from './progress-bar.vue'
 import { formatTime } from '@/assets/js/util'
 import { PLAY_MODE } from '@/assets/js/constant'
 import useLyric from './use-lyric'
 import Scroll from '@/components/base/scroll/scroll.vue'
 import useMiddleInteractive from './use-middle-interactive'
+import MiniPlayer from './mini-player.vue'
 
 export default {
   name: 'player',
   components: {
-      progressBar,
-      Scroll
+      ProgressBar,
+      Scroll,
+      MiniPlayer
     },
     setup() {
       const songReady = ref(false)
@@ -122,6 +125,7 @@ export default {
       const currentTime = ref(0)
       let progressChanging = false
       const cdImageRef = ref(null)
+      const barRef = ref(null)
       // hook
       const { modeIcon, changeMode } = useMode()
       const { getFavoriteIcon, toggleFavorite } = useFavorite()
@@ -174,6 +178,13 @@ export default {
         } else {
           audioEl.pause()
           stopLyric()
+        }
+      })
+      // 由mini切换至全屏时更新进度条
+      watch(fullScreen, async (newFullScreen) => {
+        if (newFullScreen) {
+          await nextTick()
+          barRef.value.setOffset(progress.value)
         }
       })
       // 回退
@@ -282,6 +293,7 @@ export default {
         }
       }
       return {
+        playlist,
         fullScreen,
         currentSong,
         audioRef,
@@ -317,7 +329,8 @@ export default {
         middleRStyle,
         onMiddleTouchStart,
         onMiddleTouchMove,
-        onMiddleTouchEnd
+        onMiddleTouchEnd,
+        barRef
       }
     }
 }

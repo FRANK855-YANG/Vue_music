@@ -120,3 +120,10 @@ console.log(a)// 1
 - canplay的ready() and getLyric 都是异步过程，不知道谁先触发为了保证playLyric一定会执行,在ready()里加palyLyric()
 - 5-13 纯音乐**跳过**
 - 5-15 方向锁**跳过**
+
+---
+
+## 6.17 ##
+- 5-17 progress-circle组件**跳过**
+- 5-19 miniplayer 中滑动切歌功能**跳过**
+- 
