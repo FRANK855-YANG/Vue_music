@@ -106,15 +106,10 @@
         }
       },
       scrollStyle() {
-        // const bottom = this.playlist.length ? '60px' : '0'
         return {
           top: `${this.imageHeight}px`
-          // bottom
         }
       }
-    //   ...mapState([
-    //     'playlist'
-    //   ])
      },
     mounted() {
       this.imageHeight = this.$refs.bgImage.clientHeight

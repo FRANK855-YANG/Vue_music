@@ -134,5 +134,6 @@ console.log(a)// 1
 ## 6.18 ##
 - click.stop灵活运用阻止冒泡
 - 对state种书局修改只能通过mutations，不能直接修改，先用slice()获得数组副本，操作完用commit提交
-- 5-25 removing 状态判断跳过
+- 5-25 removing 状态判断**跳过**
 - 全屏类组件一般通过`<teleport to="body">`挂载在body，防止受到父组件影响
+- 5-27 5-28**跳过**，wrap-scroll文件夹
