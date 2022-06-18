@@ -126,4 +126,13 @@ console.log(a)// 1
 ## 6.17 ##
 - 5-17 progress-circle组件**跳过**
 - 5-19 miniplayer 中滑动切歌功能**跳过**
-- 
+- 5-20，5-21 播放界面切换动画**跳过**
+- playlist点击上方空白区域收回中的防冒泡处理很关键
+
+---
+
+## 6.18 ##
+- click.stop灵活运用阻止冒泡
+- 对state种书局修改只能通过mutations，不能直接修改，先用slice()获得数组副本，操作完用commit提交
+- 5-25 removing 状态判断跳过
+- 全屏类组件一般通过`<teleport to="body">`挂载在body，防止受到父组件影响

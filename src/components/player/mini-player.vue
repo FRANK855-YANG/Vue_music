@@ -21,7 +21,7 @@
         <h2 class="name">{{currentSong.name}}</h2>
         <p class="desc">{{currentSong.singer}}</p>
       </div>
-      <div class="control">
+      <div class="control" @click.stop="showPlaylist">
         <i class="icon-playlist"></i>
           <i
             class="icon-mini"
@@ -29,7 +29,7 @@
             @click.stop="togglePlay"
           ></i>
       </div>
-      <!-- <playlist ref="playlistRef"></playlist> -->
+      <playlist ref="playlistRef"></playlist>
     </div>
   </transition>
 </template>
@@ -37,25 +37,25 @@
 <script>
   import { useStore } from 'vuex'
   import { computed, ref, watch } from 'vue'
-  // import Playlist from './playlist'
+  import Playlist from './playlist'
 
   export default {
     name: 'mini-player',
-    // components: {
-    //   Playlist
-    // },
+    components: {
+      Playlist
+    },
     props: {
       togglePlay: Function
     },
     setup() {
-      // const playlistRef = ref(null)
+      const playlistRef = ref(null)
       const minicdImageRef = ref(null)
 
       const store = useStore()
       const fullScreen = computed(() => store.state.fullScreen)
       const currentSong = computed(() => store.getters.currentSong)
       const playing = computed(() => store.state.playing)
-      // const playlist = computed(() => store.state.playlist)
+      const playlist = computed(() => store.state.playlist)
 
       const miniPlayIcon = computed(() => {
         return playing.value ? 'icon-pause-mini' : 'icon-play-mini'
@@ -72,18 +72,18 @@
         store.commit('setFullScreen', true)
       }
 
-      // function showPlaylist() {
-      //   playlistRef.value.show()
-      // }
+      function showPlaylist() {
+        playlistRef.value.show()
+      }
 
       return {
-        // playlistRef,
+        playlistRef,
         fullScreen,
         currentSong,
-        // playlist,
+        playlist,
         miniPlayIcon,
         showNormalPlayer,
-        // showPlaylist,
+        showPlaylist,
         minicdImageRef
       }
     }
