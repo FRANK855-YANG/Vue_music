@@ -39,6 +39,7 @@
         <song-list
           :songs="songs"
           @select="selectItem"
+          :rank="rank"
         ></song-list>
       </div>
     </scroll>
@@ -66,8 +67,8 @@
         }
       },
       title: String,
-      pic: String
-      // rank: Boolean
+      pic: String,
+      rank: Boolean
     },
     data() {
       return {
