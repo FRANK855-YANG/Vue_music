@@ -138,3 +138,12 @@ console.log(a)// 1
 - 全屏类组件一般通过`<teleport to="body">`挂载在body，防止受到父组件影响
 - 5-27 5-28**跳过**，wrap-scroll文件夹
 - 两个组件一套皮，直接抽出去，函数引用模式调用组件
+
+---
+
+## 6.20 ##
+- props里的值由父组件传入，不能由子组件直接修改，要想绕开，可以在data()里再定义一个，返回到模板中，这样就可以修改了
+- 在 3.x 中，自定义组件上的 v-model 相当于传递了 modelValue prop 并接收抛出的 update:modelValue 事件
+- **throttle and debounce**
+- 记得在suggest.vue里把song的值用processSong处理一下
+- 7-6 make it scrollable**跳过**
