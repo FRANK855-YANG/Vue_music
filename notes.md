@@ -147,3 +147,9 @@ console.log(a)// 1
 - **throttle and debounce**
 - 记得在suggest.vue里把song的值用processSong处理一下
 - 7-6 make it scrollable**跳过**
+- keep alive组件的用法
+- 组件import为异步组件的方法
+- 硬件：物理像素。分辨率：逻辑像素。px：视口像素。
+- dpr = 物理/逻辑。x倍屏就是dpr为x，也就是一个物理像素为几个逻辑像素。
+- 不缩放的话，一个px就是一个dpr
+- viewport里width=device-width意思，其实就是让viewport的尺寸等于逻辑像素的尺寸
