@@ -15,5 +15,7 @@ module.exports = defineConfig({
     onBeforeSetupMiddleware(app) {
       registerRouter(app.app)
     }
-  }
+  },
+  productionSourceMap: false,
+  publicPath: process.env.NODE_ENV === 'production' ? '/vue_music/' : '/'
 })

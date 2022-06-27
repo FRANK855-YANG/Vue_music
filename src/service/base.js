@@ -1,7 +1,10 @@
 import axios from 'axios'
+import axiosRetry from 'axios-retry'
+
+axiosRetry(axios, { retries: 5 })
 
 const ERR_OK = 0
-const baseURL = '/'
+const baseURL = process.env.NODE_ENV === 'production' ? 'http://120.26.74.185/vue_music/' : '/'
 
 axios.defaults.baseURL = baseURL
 
