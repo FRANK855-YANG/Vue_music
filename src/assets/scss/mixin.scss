@@ -1,7 +1,9 @@
-// 背景图片
+// 三个🏆,高清设备适配
 @mixin bg-image($url) {
   background-image: url($url + "@2x.png");
-  @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3) {
+
+  @media (-webkit-min-device-pixel-ratio: 3),
+  (min-device-pixel-ratio: 3) {
     background-image: url($url + "@3x.png");
   }
 }
@@ -16,6 +18,7 @@
 // 扩展小图标按钮的点击区域
 @mixin extend-click() {
   position: relative;
+
   &:before {
     content: '';
     position: absolute;

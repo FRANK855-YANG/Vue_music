@@ -8,5 +8,5 @@ import lazyPlugin from 'vue3-lazy'
 import '@/assets/scss/index.scss'
 
 createApp(App).use(store).use(router).use(lazyPlugin, {
-    loading: require('@/assets/images/default.png')
+    loading: require('@/assets/images/ntu.jpeg')
 }).mount('#app')

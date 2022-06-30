@@ -1,4 +1,4 @@
-## 6.8(拿到源码) ##
+## 6.8 ##
 - @代表src根目录
 - import，export，export default的区别；变量名是否需要一致的问题
 - **单文件组件中(.vue文件)组件注册和使用时的命名问题**：
@@ -153,3 +153,8 @@ console.log(a)// 1
 - dpr = 物理/逻辑。x倍屏就是dpr为x，也就是一个物理像素为几个逻辑像素。
 - 不缩放的话，一个px就是一个dpr
 - viewport里width=device-width意思，其实就是让viewport的尺寸等于逻辑像素的尺寸
+
+---
+
+## 复盘 ##
+- reset.scss 重置css,icon.scss 图标字体 babel ES6 => .ES5
